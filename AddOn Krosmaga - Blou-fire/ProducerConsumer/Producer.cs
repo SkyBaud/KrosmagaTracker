@@ -1,4 +1,5 @@
-﻿using SniffingLibs;
+﻿using NLog;
+using SniffingLibs;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -12,8 +13,9 @@ using System.Threading.Tasks;
 namespace AddOn_Krosmaga___Blou_fire.ProducerConsumer
 {
 	public class Producer
-	{
-		private Socket mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private Socket mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		private byte[] byteData = new byte[2048];
 
 		private Queue<byte[]> _queue;
@@ -79,8 +81,9 @@ namespace AddOn_Krosmaga___Blou_fire.ProducerConsumer
 				mainSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 			}
 			catch (Exception e)
-			{
-				byteData = new byte[4096];
+            {
+                logger.Error("Error: " + e);
+                byteData = new byte[4096];
 				ThreadRun();
 			}
 		}
@@ -114,8 +117,9 @@ namespace AddOn_Krosmaga___Blou_fire.ProducerConsumer
 				}
 			}
 			catch (Exception e)
-			{
-				byteData = new byte[4096];
+            {
+                logger.Error("Error: " + e);
+                byteData = new byte[4096];
 				ThreadRun();
 			}
 		}

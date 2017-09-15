@@ -26,7 +26,7 @@ using System.Collections;
 using AddOn_Krosmaga___Blou_fire.Pages;
 using MahApps.Metro.Controls;
 using System.Collections.Concurrent;
-
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire
 {
@@ -34,8 +34,9 @@ namespace AddOn_Krosmaga___Blou_fire
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window
-	{
-		private Socket mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private Socket mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		private byte[] byteData = new byte[2048];
 		private BinaryReader b;
 		private CardCollection cards;
@@ -67,7 +68,7 @@ namespace AddOn_Krosmaga___Blou_fire
 			"Xelor"
 		};
 
-		System.IO.StreamWriter fileLog = new System.IO.StreamWriter(@"log.txt", true);
+		//System.IO.StreamWriter fileLog = new System.IO.StreamWriter(@"log.txt", true);
 
 		public MainWindow()
 		{
@@ -181,9 +182,9 @@ namespace AddOn_Krosmaga___Blou_fire
 				b.ReadBytes(3);
 				while (b.BaseStream.Position < b.BaseStream.Length && b.ReadByte() != 0)
 				{
-					fileLog.WriteLine("Reading...");
+                    logger.Info("Info: Reading...");
 
-					b.ReadBytes(3);
+                    b.ReadBytes(3);
 					string messageId = ConcatHeader();
 					b.ReadByte();
 					uint size = ReadRawVarint32();
@@ -242,19 +243,16 @@ namespace AddOn_Krosmaga___Blou_fire
 							break;
 					}
 					b.ReadBytes(3);
-
-					fileLog.WriteLine("Header : " + messageId + " - " + size);
-				}
+                    
+                    logger.Info("Info: Header: " + messageId + " - " + size);
+                }
 			}
 			catch (Exception e)
 			{
-				using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"log.txt", true))
-				{
-					file.WriteLine("ERROR - " + e);
-					foreach (var item in data)
-						file.Write(item);
-				}
-			}
+                logger.Error("Error: " + e);
+				foreach (var item in data)
+                    logger.Error(item);
+            }
 		}
 
 		private void UIActionGameEventsEvent(Builders.GameEvents value)

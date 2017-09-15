@@ -4,12 +4,14 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using AddOn_Krosmaga___Blou_fire.Enums;
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire.Converter
 {
 	public class EnumDescriptionConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
 				return DependencyProperty.UnsetValue;
@@ -18,8 +20,9 @@ namespace AddOn_Krosmaga___Blou_fire.Converter
 				return GetDescription((Enum) value);
 			}
 			catch (Exception e)
-			{
-				return DependencyProperty.UnsetValue;
+            {
+                logger.Error("Error: " + e);
+                return DependencyProperty.UnsetValue;
 			}
 		}
 

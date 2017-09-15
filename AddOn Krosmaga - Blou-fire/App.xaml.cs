@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using AddOn_Krosmaga___Blou_fire.Services;
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire
 {
@@ -13,12 +14,13 @@ namespace AddOn_Krosmaga___Blou_fire
 	/// Interaction logic for App.xaml
 	/// </summary>
 	public partial class App : Application
-	{
-		public TrackerCoreSrv TrackerCoreService { get; set; }
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        public TrackerCoreSrv TrackerCoreService { get; set; }
 
 		protected override void OnStartup(StartupEventArgs e)
-		{
-			TrackerCoreService = new TrackerCoreSrv();
+        {
+            TrackerCoreService = new TrackerCoreSrv();
 			TrackerCoreService.StartService();
 			base.OnStartup(e);
 		}

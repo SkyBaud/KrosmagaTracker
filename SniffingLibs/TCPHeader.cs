@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace SniffingLibs
 {
     public class TCPHeader
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         //TCP header fields
         private ushort usSourcePort;              //Sixteen bits for the source port number
         private ushort usDestinationPort;         //Sixteen bits for the destination port number
@@ -68,8 +70,9 @@ namespace SniffingLibs
                 //Copy the TCP data into the data buffer
                 Array.Copy(byBuffer, byHeaderLength, byTCPData, 0, nReceived - byHeaderLength);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                logger.Error("Error: " + e);
             }
         }
 

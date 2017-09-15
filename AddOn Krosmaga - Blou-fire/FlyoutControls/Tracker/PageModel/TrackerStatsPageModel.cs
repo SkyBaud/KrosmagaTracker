@@ -9,12 +9,14 @@ using System.Windows.Input;
 using AddOn_Krosmaga___Blou_fire.Enums;
 using AddOn_Krosmaga___Blou_fire.Helpers;
 using MahApps.Metro;
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire.FlyoutControls.Tracker.PageModel
 {
 	public class TrackerStatsPageModel : ObservableObject
-	{
-		public TrackerStatsPageModel()
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        public TrackerStatsPageModel()
 		{
 			ComboSaisonValues = Enum.GetValues(typeof(SaisonsEnum));
 			ComboClasseValues = Enum.GetValues(typeof(ClassEnum));
@@ -51,8 +53,8 @@ namespace AddOn_Krosmaga___Blou_fire.FlyoutControls.Tracker.PageModel
 		{
 			if (_selectedItemSaison != null)
 			{
-				Debug.WriteLine("SelectedItemSaison = " + _selectedItemSaison);
-			}
+                logger.Debug("Debug: SelectedItemSaison = " + _selectedItemSaison);
+            }
 		}
 
 		#endregion
@@ -77,8 +79,8 @@ namespace AddOn_Krosmaga___Blou_fire.FlyoutControls.Tracker.PageModel
 		{
 			if (_selectedItemOppClasse != null)
 			{
-				Debug.WriteLine("SelectedItemOppClasse = " + _selectedItemOppClasse);
-			}
+                logger.Debug("Debug: SelectedItemOppClasse = " + _selectedItemOppClasse);
+            }
 		}
 
 		#endregion
@@ -103,8 +105,8 @@ namespace AddOn_Krosmaga___Blou_fire.FlyoutControls.Tracker.PageModel
 		{
 			if (_selectedItemClasse != null)
 			{
-				Debug.WriteLine("SelectedItemClasse = " + _selectedItemClasse);
-			}
+                logger.Debug("Debug: SelectedItemClasse = " + _selectedItemClasse);
+            }
 		}
 
 		#endregion

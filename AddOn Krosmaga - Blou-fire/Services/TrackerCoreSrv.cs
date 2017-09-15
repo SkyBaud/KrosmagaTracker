@@ -15,14 +15,16 @@ using AddOn_Krosmaga___Blou_fire.ProducerConsumer;
 using JsonCardsParser;
 using SQLiteConnector;
 using Match = AddOn_Krosmaga___Blou_fire.UIElements.Match;
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire.Services
 {
 	public class TrackerCoreSrv : ObservableObject
 	{
-		#region Properties
+        #region Properties
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
-		BlockingCollection<byte[]> _workQueue = new BlockingCollection<byte[]>(new ConcurrentQueue<byte[]>());
+        BlockingCollection<byte[]> _workQueue = new BlockingCollection<byte[]>(new ConcurrentQueue<byte[]>());
 		private BinaryReader _binaryReader;
 		private byte[] _lastMessage = new byte[1];
 		private List<Match> _filteredGames;
@@ -135,18 +137,15 @@ namespace AddOn_Krosmaga___Blou_fire.Services
 							break;
 					}
 					_binaryReader.ReadBytes(3);
-
-					//fileLog.WriteLine("Header : " + messageId + " - " + size);
-				}
+                    
+                    logger.Info("Info: Header : " + messageId + " - " + size);
+                }
 			}
 			catch (Exception e)
 			{
-				using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"log.txt", true))
-				{
-					file.WriteLine("ERROR - " + e);
-					foreach (var item in data)
-						file.Write(item);
-				}
+                logger.Error("Error: " + e);
+                foreach (var item in data)
+                    logger.Error(item);
 			}
 		}
 

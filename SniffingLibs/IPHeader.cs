@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace SniffingLibs
 
     public class IPHeader
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         //IP Header fields
         private byte byVersionAndHeaderLength;   //Eight bits for version and header length
         private byte byDifferentiatedServices;    //Eight bits for differentiated services (TOS)
@@ -94,8 +96,9 @@ namespace SniffingLibs
                            byIPData, 0,
                            usTotalLength - byHeaderLength);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                logger.Error("Error: " + e);
             }
         }
 

@@ -8,25 +8,26 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using NetFwTypeLib;
-using NLog.Fluent;
+using NLog;
 
 namespace AddOn_Krosmaga___Blou_fire.Helpers
 {
 	public class Helpers
-	{
-		public static bool TryOpenUrl(string url, [CallerMemberName] string memberName = "",
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        public static bool TryOpenUrl(string url, [CallerMemberName] string memberName = "",
 			[CallerFilePath] string sourceFilePath = "")
 		{
 			try
 			{
-				// Log.Info("[Helper.TryOpenUrl] " + url, memberName, sourceFilePath);
-				Process.Start(url);
+                logger.Info("Info: [Helper.TryOpenUrl] " + url, memberName, sourceFilePath);
+                Process.Start(url);
 				return true;
 			}
 			catch (Exception e)
-			{
-				// Log.Error("[Helper.TryOpenUrl] " + e, memberName, sourceFilePath);
-				return false;
+            {
+                logger.Error("Error: [Helper.TryOpenUrl] " + e, memberName, sourceFilePath);
+                return false;
 			}
 		}
 
@@ -41,9 +42,16 @@ namespace AddOn_Krosmaga___Blou_fire.Helpers
 			foreach (INetFwRule rule in fwPolicy2.Rules)
 			{
 				if (rule.Name.IndexOf("KrosmagaAddOn: " + System.IO.Path.GetFileName(Assembly.GetEntryAssembly().Location)) != -1)
-				{
-					fwPolicy2.Rules.Remove(rule.Name);
-					break;
+                {
+                    try
+                    {
+                        fwPolicy2.Rules.Remove(rule.Name);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error("Error: " + e);
+                    }
+                    break;
 				}
 			}
 			if (!_exist)
